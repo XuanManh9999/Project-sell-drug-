@@ -4,6 +4,4 @@ const AxiosConFig = axios.create({
   baseURL: URL.SERVER_LOCAL,
 });
 
-// config JWT o day
-
 export default AxiosConFig;

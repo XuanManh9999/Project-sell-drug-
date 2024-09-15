@@ -1,16 +1,31 @@
 import { Routes, Route } from "react-router-dom";
 import PATH from "./utils/utils-url-route";
-import { Login, ForgotPassword, Register, NOTFOUND } from "./container/public";
+import { Login, ForgotPassword, Register, NotFound } from "./container/public";
+import { HomeAdmin } from "./container/admin";
 function App() {
+  const publicRoutes = [
+    { paths: [PATH.HOME, PATH.LOGIN], element: <Login /> },
+    { path: PATH.FORGOTPASSWORD, element: <ForgotPassword /> },
+    { path: PATH.REGISTER, element: <Register /> },
+  ];
+  //     { path: PATH.NOTFOUND, element: <NotFound /> },
+  const privateRoutes = [{ path: PATH.MANAGE, element: <HomeAdmin /> }];
   return (
     <>
-      {/* PUBLIC */}
+      {/* Private */}
       <Routes>
-        <Route path={PATH.HOME} element={<Login />} />
-        <Route path={PATH.LOGIN} element={<Login />} />
-        <Route path={PATH.FORGOTPASSWORD} element={<ForgotPassword />} />
-        <Route path={PATH.REGISTER} element={<Register />} />
-        <Route path={PATH.NOTFOUND} element={<NOTFOUND />} />
+        <Route path={PATH.MANAGE} element={<HomeAdmin />}></Route>
+      </Routes>
+      {/* Public */}
+      <Routes>
+        {publicRoutes.map(({ paths, path, element }) => {
+          if (paths) {
+            return paths.map((p) => (
+              <Route key={p} path={p} element={element} />
+            ));
+          }
+          return <Route key={path} path={path} element={element} />;
+        })}
       </Routes>
     </>
   );
