@@ -39,4 +39,49 @@ const register = async (body) => {
   }
 };
 
-export { login, register };
+const getUsers = async () => {
+  try {
+    const response = await AxiosConFig.get("/user/users");
+    return {
+      data: response.data.data || {},
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: {},
+      error: error.response ? error.response.data : error.message,
+    };
+  }
+};
+
+const getUserById = async (id) => {
+  try {
+    const response = await AxiosConFig.get(`user/${id}`);
+    return {
+      data: response.data.data || {},
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: {},
+      error: error.response ? error.response.data : error.message,
+    };
+  }
+};
+
+const deleteUserById = async (id) => {
+  try {
+    const response = await AxiosConFig.delete(`user/${id}`);
+    return {
+      data: response.data.data || {},
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: {},
+      error: error.response ? error.response.data : error.message,
+    };
+  }
+};
+
+export { login, register, getUsers, getUserById, deleteUserById };

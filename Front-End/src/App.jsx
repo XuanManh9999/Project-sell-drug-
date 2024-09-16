@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import PATH from "./utils/utils-url-route";
 import { Login, ForgotPassword, Register, NotFound } from "./container/public";
-import { HomeAdmin } from "./container/admin";
+import { HomeAdmin, ManageUser } from "./container/admin";
 function App() {
   const publicRoutes = [
     { paths: [PATH.HOME, PATH.LOGIN], element: <Login /> },
@@ -14,7 +14,9 @@ function App() {
     <>
       {/* Private */}
       <Routes>
-        <Route path={PATH.MANAGE} element={<HomeAdmin />}></Route>
+        <Route path={PATH.MANAGE} element={<HomeAdmin />}>
+          <Route path={PATH.MANAGE_USER} element={<ManageUser />} />
+        </Route>
       </Routes>
       {/* Public */}
       <Routes>

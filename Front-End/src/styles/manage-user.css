@@ -1,0 +1,122 @@
+.title-manage-user {}
+
+.container-manager-user {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.flex-row-container-manager-user {
+    width: calc(100% / 3 - 10px);
+}
+
+.flex-row-container-manager-user label {
+    display: block;
+    font-weight: 600;
+}
+
+.flex-row-container-manager-user input {
+    height: 25px;
+    width: 99%;
+}
+
+.action-manage-user {
+    margin-top: 10px;
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+
+
+
+.btn-submid-manage-user {}
+
+
+/* Table */
+/* Manage User Styles */
+.manage-user-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.title-manage-user {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.table-manage-user {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.table-manage-user th,
+.table-manage-user td {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.table-manage-user th {
+    background-color: #f4f4f4;
+}
+
+.table-manage-user td {
+    background-color: #fff;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-edit,
+.btn-delete {
+    padding: 5px 10px;
+    cursor: pointer;
+    border: none;
+    color: white;
+
+}
+
+.btn-edit {
+    background-color: #4CAF50;
+}
+
+.btn-delete {
+    background-color: #f44336;
+}
+
+.btn-add-user,
+.btn-back-home {
+
+    padding: 10px 15px;
+    margin-right: 10px;
+    cursor: pointer;
+    border: none;
+    color: white;
+    background-color: #008CBA;
+}
+
+.btn-back-home {
+    background-color: #f39c12;
+    text-decoration: none;
+}
+
+.action-manage-user {
+    text-align: center;
+    margin-top: 20px;
+}
+
+input:read-only {
+    background-color: #f0f0f0;
+    /* Màu nền cho input chỉ đọc */
+    color: #333;
+    /* Màu chữ */
+    border: 1px solid #ccc;
+    /* Viền cho input */
+    cursor: not-allowed;
+    /* Con trỏ chuột khi hover */
+}

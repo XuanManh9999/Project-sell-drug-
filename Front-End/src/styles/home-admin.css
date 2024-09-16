@@ -15,8 +15,14 @@
     padding: 10px 20px;
 }
 
+.navbar-brand {
+    text-decoration: none;
+    color: #fff;
+}
+
 .navbar-brand h1 {
     margin: 0;
+
 }
 
 .navbar-menu {
