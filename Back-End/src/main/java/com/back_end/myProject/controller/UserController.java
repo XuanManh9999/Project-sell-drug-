@@ -4,6 +4,9 @@ package com.back_end.myProject.controller;
 import com.back_end.myProject.dto.UserDTO;
 import com.back_end.myProject.service.UserService;
 import com.back_end.myProject.utils.ResponseCustom;
+import com.back_end.myProject.utils.ResponsePageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +20,32 @@ public class UserController {
     private final UserService userService;
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @PostMapping("")
+    public ResponseEntity<ResponseCustom> createUser (@RequestBody UserDTO userDTO) {
+        ResponseCustom responseCustom;
+        try {
+            String fullname = userDTO.getFullname();
+            String email = userDTO.getEmail();
+            String password = userDTO.getPassword();
+            if (fullname == null || email == null || password == null) {
+                responseCustom = new ResponseCustom(HttpStatus.BAD_REQUEST.value(), "Missing required fields", null);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCustom);
+            }
+            boolean IsCreate = userService.createUser(userDTO);
+            if (IsCreate) {
+                responseCustom = new ResponseCustom(HttpStatus.CREATED.value(), "User created", null);
+                return ResponseEntity.status(HttpStatus.CREATED).body(responseCustom);
+            }else {
+                responseCustom = new ResponseCustom(HttpStatus.CONFLICT.value(), "User already exists", null);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(responseCustom);
+            }
+
+        }catch (Exception ex) {
+            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error", ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCustom);
+        }
     }
 
     @PostMapping("/login")
@@ -111,10 +140,8 @@ public class UserController {
             Long id = userDTO.getId();
             String email = userDTO.getEmail();
             String fullname = userDTO.getFullname();
-            Integer age = userDTO.getAge();
-            String phone = userDTO.getPhone();
             String password = userDTO.getPassword();
-            if (id == null || email == null || fullname == null || age == null || phone == null || password == null) {
+            if (id == null || email == null || fullname == null ||  password == null) {
                 responseCustom = new ResponseCustom(HttpStatus.BAD_REQUEST.value(), "Missing required fields", null);
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCustom);
             }
@@ -193,5 +220,21 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseCustom);
         }
     }
+
+
+    @GetMapping("/test/users")
+    public ResponseEntity<ResponseCustom> getAllUsers (Pageable pageable) {
+        try {
+            Page<UserDTO> userPage = userService.getUsers(pageable);
+            if (userPage.hasContent()) {
+                return ResponseEntity.ok(new ResponseCustom(HttpStatus.OK.value(), "Users", userPage));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ResponseCustom(HttpStatus.NOT_FOUND.value(), "No users found", null));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Internal Server Error", e.getMessage()));
+        }
+    }
+
 
 }

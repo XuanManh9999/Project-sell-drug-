@@ -6,6 +6,8 @@ import com.back_end.myProject.repositorys.UserRepository;
 import com.back_end.myProject.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -107,5 +109,24 @@ public class UserServiceImpl implements UserService {
     public UserDTO findUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         return user.map(value -> mapper.map(value, UserDTO.class)).orElse(null);
+    }
+
+    @Override
+    public boolean createUser(UserDTO userDTO) {
+        // find email
+
+        Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
+        if (user.isPresent()) {
+            return false;
+        }
+        User newUser = mapper.map(userDTO, User.class);
+        userRepository.save(newUser);
+        return true;
+    }
+
+    @Override
+    public Page<UserDTO> getUsers(Pageable pageable) {
+        Page<User> userPage = userRepository.findAll(pageable);
+        return userPage.map(user -> mapper.map(user, UserDTO.class));
     }
 }
