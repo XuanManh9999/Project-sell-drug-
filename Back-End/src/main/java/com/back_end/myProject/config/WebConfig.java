@@ -8,7 +8,7 @@ public class WebConfig  implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/api/v1/**")  // Cho phép mọi đường dẫn
-                .allowedOrigins("http://localhost:5173/")  // Cho phép mọi domain
+                .allowedOrigins("http://localhost:5173/")  // cho phep duong dan
                 .allowedMethods("GET", "POST", "PUT", "DELETE")  // Các method cho phép
                 .allowedHeaders("*")  // Các header cho phép
                 .exposedHeaders("Authorization");  // Header được lộ ra
