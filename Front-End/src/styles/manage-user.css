@@ -1,11 +1,18 @@
-.title-manage-user {}
+/* Định dạng tiêu đề quản lý người dùng */
+.title-manage-user {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
 
+/* Khung chứa thông tin quản lý người dùng */
 .container-manager-user {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
 }
 
+/* Định dạng cho từng hàng trong khung quản lý người dùng */
 .flex-row-container-manager-user {
     width: calc(100% / 3 - 10px);
 }
@@ -20,6 +27,7 @@
     width: 99%;
 }
 
+/* Nút và hành động quản lý người dùng */
 .action-manage-user {
     margin-top: 10px;
     display: flex;
@@ -27,26 +35,22 @@
     justify-content: flex-end;
 }
 
-
-
-.btn-submid-manage-user {}
-
-
-/* Table */
-/* Manage User Styles */
-.manage-user-wrapper {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+/* Nút thêm người dùng và các nút hành động khác */
+.btn-submid-manage-user {
+    padding: 10px 15px;
+    cursor: pointer;
+    border: none;
+    color: white;
+    background-color: #008CBA;
 }
 
-.title-manage-user {
-    text-align: center;
-    font-size: 2em;
-    margin-bottom: 20px;
+.btn-submid-manage-user:hover {
+    background-color: #005f73;
 }
 
+/* Định dạng bảng quản lý người dùng */
 .table-manage-user {
+    margin-top: 20px;
     width: 100%;
     border-collapse: collapse;
     margin-bottom: 20px;
@@ -67,6 +71,7 @@
     background-color: #fff;
 }
 
+/* Nút chỉnh sửa và xóa trong bảng */
 .action-buttons {
     display: flex;
     gap: 10px;
@@ -78,7 +83,6 @@
     cursor: pointer;
     border: none;
     color: white;
-
 }
 
 .btn-edit {
@@ -89,9 +93,10 @@
     background-color: #f44336;
 }
 
+/* Nút tìm kiếm và quay lại trang chính */
+.btn-search-user,
 .btn-add-user,
 .btn-back-home {
-
     padding: 10px 15px;
     margin-right: 10px;
     cursor: pointer;
@@ -100,23 +105,64 @@
     background-color: #008CBA;
 }
 
+.btn-search-user {
+    background-color: green;
+}
+
 .btn-back-home {
     background-color: #f39c12;
     text-decoration: none;
 }
 
-.action-manage-user {
-    text-align: center;
-    margin-top: 20px;
-}
-
+/* Định dạng input chỉ đọc */
 input:read-only {
     background-color: #f0f0f0;
-    /* Màu nền cho input chỉ đọc */
     color: #333;
-    /* Màu chữ */
     border: 1px solid #ccc;
-    /* Viền cho input */
     cursor: not-allowed;
-    /* Con trỏ chuột khi hover */
+}
+
+/* Định dạng phân trang */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+.pagination-container {
+    list-style-type: none;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pagination-page,
+.pagination-previous,
+.pagination-next {
+    background-color: #008CBA;
+    color: white;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination-page:hover,
+.pagination-previous:hover,
+.pagination-next:hover {
+    background-color: #005f73;
+}
+
+.pagination-disabled {
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+}
+
+.pagination-active {
+    background-color: #004d40;
+}
+
+.back-to-home-manage-user {
+    list-style-type: none;
+    text-decoration: none;
+    background-color: green;
 }

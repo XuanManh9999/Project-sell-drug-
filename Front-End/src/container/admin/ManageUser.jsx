@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
 import "../../styles/manage-user.css";
 import { useEffect, useRef, useState } from "react";
-import { getUsers, deleteUserById, getUserById } from "../../services/api-user";
+import {
+  getUsers,
+  deleteUserById,
+  getUserById,
+  createUser,
+  updateUser,
+} from "../../services/api-user";
+import { validateEmail, isVietnamesePhoneNumber } from "../../utils/utils-func";
 import { toast } from "react-toastify";
+import ReactPaginate from "react-paginate";
+
 function ManageUser() {
   const handleBtn = useRef(null);
   const [data, setData] = useState({
@@ -13,9 +22,16 @@ function ManageUser() {
     phone: "",
     password: "",
   });
+  const [isDeleteUser, setIsDeleteUser] = useState(false);
+  const [isSubmit, setIsSubmit] = useState(false);
   const [users, setUsers] = useState([]);
+  const [pageCount, setPageCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
-  const handleInputOnchange = (event) => {
+  const itemsPerPage = 2; // Số lượng mục trên mỗi trang
+
+  // Hàm xử lý thay đổi input
+  const handleInputOnChange = (event) => {
     const { name, value } = event.target;
     setData((prev) => ({
       ...prev,
@@ -23,155 +39,269 @@ function ManageUser() {
     }));
   };
 
+  // Hàm lấy dữ liệu người dùng
+  const fetchDataUsers = async (page = 0) => {
+    try {
+      const response = await getUsers(page, itemsPerPage); // Thay đổi để hỗ trợ phân trang
+      if (response && response.error == null) {
+        setUsers(response.data.data.content);
+        setPageCount(
+          Math.ceil(response.data.data.totalElements / itemsPerPage)
+        ); // Cập nhật số trang
+      } else {
+        toast.error(response.error?.message || "Failed to fetch users");
+      }
+    } catch (error) {
+      toast.error("An error occurred while fetching users");
+    }
+  };
+
+  // Hàm xử lý chỉnh sửa người dùng
   const editUserById = async (id) => {
-    async function editData() {
+    try {
       const { data, error } = await getUserById(id);
       if (error == null) {
         handleBtn.current.textContent = "Edit User";
         handleBtn.current.style.background = "red";
-        setData({ ...data });
+        setData(data);
       } else {
         toast.warn(error.message);
       }
+    } catch (error) {
+      toast.error("An error occurred while fetching user details");
     }
-    editData();
   };
 
-  const deleteUserById = (id) => {
-    if (!id) {
-      toast.warn("id does not exist");
-    } else {
-      async function deleteUserById() {
+  // Hàm xử lý xóa người dùng
+  const handleDeleteUserById = async (id) => {
+    const isDelete = window.confirm("Bạn có chắc chắn muốn xóa không?");
+    if (isDelete && id) {
+      try {
         const response = await deleteUserById(id);
-        console.log("Xuan manh check response", response);
+        if (response && response.code === 200) {
+          toast.success(response.message);
+          setIsDeleteUser((prev) => !prev); // Cập nhật để trigger useEffect
+        } else {
+          toast.error(response.message);
+        }
+      } catch (error) {
+        toast.error("An error occurred while deleting user");
       }
-      deleteUserById();
+    } else if (!id) {
+      toast.warn("ID does not exist");
     }
   };
 
+  // UseEffect để lấy dữ liệu khi component mount hoặc khi có thay đổi từ delete hoặc submit
   useEffect(() => {
-    async function fetchDataUsers() {
-      const response = await getUsers();
-      if (response && response?.error == null) {
-        setUsers(response.data);
+    fetchDataUsers(currentPage);
+  }, [isDeleteUser, isSubmit, currentPage]);
+
+  // Hàm xử lý submit
+  const handleSubmit = async () => {
+    const { id, email, password, age, phone, fullname } = data;
+    if (!validateEmail(email)) {
+      toast.warn("Email is not in correct format");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.warn("Password must be at least 6 characters");
+      return;
+    }
+
+    if (fullname.length < 6) {
+      toast.warn("Fullname must be at least 6 characters");
+      return;
+    }
+    if (phone != "" && !isVietnamesePhoneNumber(phone)) {
+      toast.warn("Invalid phone number, please re-enter");
+      return;
+    }
+    if (age != "" && (age >= 150 || age <= 0)) {
+      toast.warn("Invalid age, please try again");
+      return;
+    }
+    if (handleBtn.current.textContent === "Edit User" && id !== "") {
+      try {
+        const response = await updateUser(data);
+        if (response && response.code === 200) {
+          toast.success(response.message);
+          setIsSubmit((prev) => !prev);
+          setData({
+            id: "",
+            fullname: "",
+            email: "",
+            age: "",
+            phone: "",
+            password: "",
+          });
+          handleBtn.current.textContent = "Add User";
+          handleBtn.current.style.background = "#008CBA";
+        } else {
+          toast.error(response.message);
+        }
+      } catch (error) {
+        toast.error("An error occurred while updating user");
+      }
+    } else {
+      try {
+        const response = await createUser(data);
+        if (response?.code === 201) {
+          toast.success(response.message);
+          setData({
+            id: "",
+            fullname: "",
+            email: "",
+            age: "",
+            phone: "",
+            password: "",
+          });
+          setIsSubmit((prev) => !prev);
+        } else {
+          toast.error(response.message);
+        }
+      } catch (error) {
+        toast.error("An error occurred while creating user");
       }
     }
-    fetchDataUsers();
-  }, []);
+  };
+
+  // Hàm xử lý thay đổi trang
+  const handlePageClick = (event) => {
+    const selectedPage = event.selected;
+    setCurrentPage(selectedPage); // Cập nhật trang hiện tại
+  };
 
   return (
     <>
       <h1 className="title-manage-user">Manage User</h1>
       <div className="container-manager-user">
-        {/* Form nhập liệu */}
         <div className="flex-row-container-manager-user">
-          <label htmlFor="">ID: </label>
+          <label>ID: </label>
           <input
             type="text"
             readOnly
-            onChange={handleInputOnchange}
-            value={data.id}
+            name="id"
+            onChange={handleInputOnChange}
+            value={data.id || ""}
           />
         </div>
         <div className="flex-row-container-manager-user">
-          <label htmlFor="">Email: </label>
+          <label>Email: </label>
           <input
             type="email"
             name="email"
             placeholder="Nhập vào email..."
-            onChange={handleInputOnchange}
-            value={data.email}
+            onChange={handleInputOnChange}
+            value={data.email || ""}
           />
         </div>
         <div className="flex-row-container-manager-user">
-          <label htmlFor="">Fullname: </label>
+          <label>Fullname: </label>
           <input
             type="text"
             name="fullname"
             placeholder="Nhập vào fullname..."
-            onChange={handleInputOnchange}
-            value={data.fullname}
+            onChange={handleInputOnChange}
+            value={data.fullname || ""}
           />
         </div>
         <div className="flex-row-container-manager-user">
-          <label htmlFor="">Age: </label>
+          <label>Age: </label>
           <input
             type="number"
             name="age"
             placeholder="Nhập vào age..."
-            onChange={handleInputOnchange}
-            value={data.age}
+            onChange={handleInputOnChange}
+            value={data.age || ""}
           />
         </div>
         <div className="flex-row-container-manager-user">
-          <label htmlFor="">Phone: </label>
+          <label>Phone: </label>
           <input
-            type="number"
+            type="text"
             name="phone"
             placeholder="Nhập vào phone..."
-            onChange={handleInputOnchange}
-            value={data.phone}
+            onChange={handleInputOnChange}
+            value={data.phone || ""}
           />
         </div>
         <div className="flex-row-container-manager-user">
-          <label htmlFor="">Password: </label>
+          <label>Password: </label>
           <input
             type="password"
             name="password"
             placeholder="Nhập vào password..."
-            onChange={handleInputOnchange}
-            value={data.password}
+            onChange={handleInputOnChange}
+            value={data.password || ""}
           />
         </div>
       </div>
       <div className="action-manage-user">
-        <button className="btn-add-user" ref={handleBtn}>
+        <button
+          className="btn-submid-manage-user"
+          onClick={handleSubmit}
+          ref={handleBtn}>
           Add User
         </button>
-        <Link to={"/trang-chu"} className="btn-back-home">
-          Back to Home
+        <Link
+          className="btn-submid-manage-user back-to-home-manage-user"
+          to={"/trang-chu"}>
+          Trở lại trang chủ
         </Link>
       </div>
       <div className="manage-user-wrapper">
-        <h1 className="title-manage-user">Table User</h1>
-        <table className="table-manage-user">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Email</th>
-              <th>Fullname</th>
-              <th>Age</th>
-              <th>Phone</th>
-              <th>Password</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users &&
-              users.map((item) => (
-                <tr key={item?.id}>
-                  <td>{item?.id}</td>
-                  <td>{item?.email}</td>
-                  <td>{item?.fullname}</td>
-                  <td>{item?.age}</td>
-                  <td>{item?.phone}</td>
-                  <td>{item?.password}</td>
-                  <td className="action-buttons">
-                    <button
-                      className="btn-edit"
-                      onClick={() => editUserById(item?.id)}>
-                      Edit
-                    </button>
-                    <button
-                      className="btn-delete"
-                      onClick={() => deleteUserById(item?.id)}>
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+        <div className="table-manage-user">
+          <table className="table-manage-user">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Email</th>
+                <th>Fullname</th>
+                <th>Age</th>
+                <th>Phone</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users &&
+                users.map((user) => (
+                  <tr key={user.id}>
+                    <td>{user.id}</td>
+                    <td>{user.email}</td>
+                    <td>{user.fullname}</td>
+                    <td>{user.age}</td>
+                    <td>{user.phone}</td>
+                    <td className="action-buttons">
+                      <button
+                        className="btn-edit"
+                        onClick={() => editUserById(user.id)}>
+                        Edit
+                      </button>
+                      <button
+                        className="btn-delete"
+                        onClick={() => handleDeleteUserById(user.id)}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="pagination">
+          <ReactPaginate
+            pageCount={pageCount}
+            onPageChange={handlePageClick}
+            containerClassName={"pagination-container"}
+            pageClassName={"pagination-page"}
+            previousClassName={"pagination-previous"}
+            nextClassName={"pagination-next"}
+            disabledClassName={"pagination-disabled"}
+            activeClassName={"pagination-active"}
+          />
+        </div>
       </div>
     </>
   );

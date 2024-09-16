@@ -1,12 +1,18 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import "../../styles/home-admin.css";
 import PATH from "../../utils/utils-url-route";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 function HomeAdmin() {
+  const location = useLocation(); // Lấy thông tin location
+
   const handleClickLogOut = () => {
     localStorage.clear();
   };
+
+  // Kiểm tra nếu path là root thì hiển thị đoạn text "Chào mừng đến với trang quản trị"
+  const isRootPath = location.pathname === "/trang-chu";
 
   return (
     <div className="home-admin-container">
@@ -15,10 +21,9 @@ function HomeAdmin() {
           <h1>HomeAdmin</h1>
         </Link>
         <div className="navbar-menu">
-          <NavLink to="/quan-ly-tai-khoan">Quản lý tài khoản</NavLink>
-          <NavLink to="/quan-ly-don-thuoc">Quản lý đơn thuốc</NavLink>
-          <NavLink to="/quan-ly-hoa-don">Quản lý hóa đơn</NavLink>
-          <NavLink to={PATH.MANAGE_USER}>Quản lý người dùng</NavLink>
+          <Link to={PATH.MANAGE_USER}>Quản lý người dùng</Link>
+          <Link to={PATH.MANAGE_BILL}>Quản lý đơn thuốc</Link>
+          <Link to={PATH.MANAGE_BILL}>Quản lý hóa đơn</Link>
         </div>
         <div className="navbar-user">
           <span className="username">Xin chào, Admin</span>
@@ -28,7 +33,8 @@ function HomeAdmin() {
         </div>
       </nav>
       <main className="main-content">
-        <h2>Chào mừng đến với trang quản trị</h2>
+        {isRootPath && <h2>Chào mừng đến với trang quản trị</h2>}
+        {/* Chỉ hiển thị khi path là root */}
         <Outlet />
         {/* Nội dung chính của trang sẽ được thêm vào đây */}
       </main>

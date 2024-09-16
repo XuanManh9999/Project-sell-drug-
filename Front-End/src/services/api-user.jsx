@@ -39,20 +39,20 @@ const register = async (body) => {
   }
 };
 
-const getUsers = async () => {
-  try {
-    const response = await AxiosConFig.get("/user/users");
-    return {
-      data: response.data.data || {},
-      error: null,
-    };
-  } catch (error) {
-    return {
-      data: {},
-      error: error.response ? error.response.data : error.message,
-    };
-  }
-};
+// const getUsers = async () => {
+//   try {
+//     const response = await AxiosConFig.get("/user/users");
+//     return {
+//       data: response.data.data || {},
+//       error: null,
+//     };
+//   } catch (error) {
+//     return {
+//       data: {},
+//       error: error.response ? error.response.data : error.message,
+//     };
+//   }
+// };
 
 const getUserById = async (id) => {
   try {
@@ -72,8 +72,39 @@ const getUserById = async (id) => {
 const deleteUserById = async (id) => {
   try {
     const response = await AxiosConFig.delete(`user/${id}`);
+    return response.data || {};
+  } catch (error) {
+    console.log(error);
+
+    return response.data || {};
+  }
+};
+const createUser = async (body) => {
+  try {
+    const response = await AxiosConFig.post("user", body);
+    return response?.data || {};
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+const updateUser = async (body) => {
+  let response;
+  try {
+    response = await AxiosConFig.put("user", body);
+    return response?.data || {};
+  } catch (error) {
+    return error.response.data;
+  }
+};
+
+const getUsers = async (page = 0, size = 10) => {
+  try {
+    const response = await AxiosConFig.get(
+      `/user/test/users?page=${page}&size=${size}`
+    );
     return {
-      data: response.data.data || {},
+      data: response.data || {},
       error: null,
     };
   } catch (error) {
@@ -84,4 +115,12 @@ const deleteUserById = async (id) => {
   }
 };
 
-export { login, register, getUsers, getUserById, deleteUserById };
+export {
+  login,
+  register,
+  getUsers,
+  getUserById,
+  deleteUserById,
+  createUser,
+  updateUser,
+};
