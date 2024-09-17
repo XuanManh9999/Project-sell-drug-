@@ -2,15 +2,21 @@ package com.back_end.myProject.controller;
 
 
 import com.back_end.myProject.dto.UserDTO;
+import com.back_end.myProject.dto.request.AuthenticationRequest;
+import com.back_end.myProject.dto.request.IntrospeactRequest;
+import com.back_end.myProject.dto.response.AuthenticationResponse;
+import com.back_end.myProject.dto.response.IntrospeactResponse;
 import com.back_end.myProject.service.UserService;
 import com.back_end.myProject.utils.ResponseCustom;
 import com.back_end.myProject.utils.ResponsePageable;
+import com.nimbusds.jose.JOSEException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -236,5 +242,15 @@ public class UserController {
         }
     }
 
+
+    @PostMapping("/test/auth/log-in")
+    public AuthenticationResponse authenticateUser (@RequestBody AuthenticationRequest authenticationRequest) {
+      return  userService.authenticate(authenticationRequest);
+    }
+
+        @PostMapping("/test/auth/token")
+    public IntrospeactResponse introspeactResponse (@RequestBody IntrospeactRequest introspeactRequest) throws ParseException, JOSEException {
+        return userService.introspeact(introspeactRequest);
+    }
 
 }

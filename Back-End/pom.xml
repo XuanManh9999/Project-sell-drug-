@@ -60,7 +60,38 @@
 			<artifactId>lombok</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>6.3.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt -->
+		<dependency>
+			<groupId>com.nimbusds</groupId>
+			<artifactId>nimbus-jose-jwt</artifactId>
+			<version>9.41.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.liferay.portal</groupId>
+			<artifactId>com.liferay.portal.kernel</artifactId>
+			<version>149.0.0</version>
+			<scope>provided</scope>
+		</dependency>
 
+		<!-- SLF4J API -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+<!--			<version>1.7.36</version> &lt;!&ndash; Hoặc phiên bản mới hơn &ndash;&gt;-->
+		</dependency>
+
+<!--		&lt;!&ndash; SLF4J Simple (hoặc bạn có thể chọn Logback hoặc Log4j) &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>org.slf4j</groupId>-->
+<!--			<artifactId>slf4j-simple</artifactId>-->
+<!--			<version>1.7.36</version> &lt;!&ndash; Hoặc phiên bản mới hơn &ndash;&gt;-->
+<!--		</dependency>-->
 	</dependencies>
 
 	<build>
