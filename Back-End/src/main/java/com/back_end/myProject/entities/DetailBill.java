@@ -1,5 +1,6 @@
 package com.back_end.myProject.entities;
 
+import com.back_end.myProject.dto.DetailBillDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +10,7 @@ import lombok.Setter;
 @Table(name = "detailbill")
 @Getter
 @Setter
-public class DetailBill {
+public class DetailBill  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,5 +29,6 @@ public class DetailBill {
     @ManyToOne
     @JoinColumn(name = "id_bill")
     private Bill bill;
+
 
 }

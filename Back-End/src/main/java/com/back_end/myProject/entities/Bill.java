@@ -18,6 +18,11 @@ public class Bill {
     private String name;
     @Column(name = "status", columnDefinition = "int default 1")
     private Integer status;
+    @Column(name = "customer_phone")
+    private String customer_phone;
+
+    @Column(name = "customer_name")
+    private String customerName;
 
     @OneToMany(mappedBy = "bill")
     private List<DetailBill> listDetailBill;

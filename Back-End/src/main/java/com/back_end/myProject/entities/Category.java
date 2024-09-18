@@ -21,6 +21,8 @@ public class Category {
 
     @Column(columnDefinition = "TEXT", name = "description")
     private String description;
+
+
     @Column (columnDefinition = "int default 1", name = "status")
     private Integer status;
 
