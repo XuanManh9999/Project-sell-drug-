@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 @Service
 public class MedicineServiceImpl implements IMedicine {
@@ -38,6 +39,7 @@ public class MedicineServiceImpl implements IMedicine {
         Optional<Category> category = categoryRepository.findById((Long) medicineDTO.getId_category());
         category.ifPresent(medicine::setCategory);
         medicine.setFormulation(medicineDTO.getFormulation());
+        medicine.setComposition(medicineDTO.getComposition());
         medicine.setUrl_image(medicineDTO.getUrl_image());
         medicine.setUsage_instructions(medicineDTO.getUsage_instructions());
         medicineRepository.save(medicine);
@@ -47,7 +49,17 @@ public class MedicineServiceImpl implements IMedicine {
     @Override
     public Page<MedicineDTO> getAllMedicines(Pageable pageable) {
         Page<Medicine> medicines = medicineRepository.findAll(pageable);
-        return medicines.map(medicine -> modelMapper.map(medicine, MedicineDTO.class));
+
+        return medicines.map(medicine -> {
+            MedicineDTO medicineDTO = modelMapper.map(medicine, MedicineDTO.class);
+
+            // Kiểm tra và map Category nếu tồn tại
+            if (medicine.getCategory() != null) {
+                CategoryDTO categoryDTO = modelMapper.map(medicine.getCategory(), CategoryDTO.class);
+                medicineDTO.setCategoryDTO(categoryDTO);
+            }
+            return medicineDTO;
+        });
     }
 
 
@@ -57,8 +69,10 @@ public class MedicineServiceImpl implements IMedicine {
         if (medicine.isPresent()) {
             MedicineDTO medicineDTO = new MedicineDTO();
             medicineDTO = modelMapper.map(medicine.get(), MedicineDTO.class);
-            CategoryDTO categoryDTO = modelMapper.map(medicine.get().getCategory(), CategoryDTO.class);
-            medicineDTO.setCategoryDTO(categoryDTO);
+            if (medicine.get().getCategory() != null) {
+                CategoryDTO categoryDTO = modelMapper.map(medicine.get().getCategory(), CategoryDTO.class);
+                medicineDTO.setCategoryDTO(categoryDTO);
+            }
             return medicineDTO;
         }
         return null;
@@ -72,13 +86,16 @@ public class MedicineServiceImpl implements IMedicine {
             medicine.setName(medicineDTO.getName());
             medicine.setQuantity(medicineDTO.getQuantity());
             medicine.setDosage(medicineDTO.getDosage());
+            medicine.setComposition(medicineDTO.getComposition());
             medicine.setFormulation(medicineDTO.getFormulation());
             medicine.setUrl_image(medicineDTO.getUrl_image());
             medicine.setUsage_instructions(medicineDTO.getUsage_instructions());
-
-            Optional<Category> category = categoryRepository.findById((Long) medicineDTO.getId_category());
-            category.ifPresent(medicine::setCategory);
-
+            if (medicineDTO.getId_category() != null) {
+                Optional<Category> category = categoryRepository.findById((Long) medicineDTO.getId_category());
+                category.ifPresent(medicine::setCategory);
+            }else {
+                medicine.setCategory(null);
+            }
             medicineRepository.save(medicine);
             return true;
         }
@@ -93,6 +110,11 @@ public class MedicineServiceImpl implements IMedicine {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<MedicineDTO> findByField(MedicineDTO medicineDTO) {
+        return medicineRepository.findByField(medicineDTO);
     }
 
 }

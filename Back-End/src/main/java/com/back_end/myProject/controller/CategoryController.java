@@ -24,7 +24,7 @@ public class CategoryController {
     public ResponseEntity<?> getAllCategories(Pageable pageable) {
         ResponseCustom responseCustom;
         try {
-            Page<Category> categoryDTOS = categoryService.getCategories(pageable);
+            Page<CategoryDTO> categoryDTOS = categoryService.getCategories(pageable);
             responseCustom = new ResponseCustom(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), categoryDTOS);
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
         }catch (Exception e) {
@@ -33,6 +33,38 @@ public class CategoryController {
 
         }
     }
+
+    @GetMapping(value = "/categories-load")
+    public ResponseEntity<?> loadCategoriesFromDB() {
+        ResponseCustom responseCustom;
+        try {
+            List<CategoryDTO> categoryDTOS = categoryService.getNameAndIdCategories();
+            responseCustom = new ResponseCustom(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), categoryDTOS);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }catch (Exception e) {
+            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), null);
+            return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/category/{id}")
+    public ResponseEntity<?> getCategoryById(@PathVariable("id") Long id) {
+        ResponseCustom responseCustom;
+        try {
+            CategoryDTO categoryDTO = categoryService.getCategoryById(id);
+            if (categoryDTO != null) {
+                responseCustom = new ResponseCustom(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), categoryDTO);
+                return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+            }else {
+                responseCustom = new ResponseCustom(HttpStatus.NOT_FOUND.value(), HttpStatus.NOT_FOUND.getReasonPhrase(), null);
+                return new ResponseEntity<>(responseCustom, HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception ex) {
+            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), null);
+            return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @PostMapping(value = "/category")
     public ResponseEntity<?> addCategory(@RequestBody CategoryDTO categoryDTO) {
@@ -46,11 +78,11 @@ public class CategoryController {
             }else {
                  Boolean isCreate = categoryService.createCategory(categoryDTO);
                  if (isCreate) {
-                     responseCustom = new ResponseCustom(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), isCreate);
-                     return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+                     responseCustom = new ResponseCustom(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), isCreate);
+                     return new ResponseEntity<>(responseCustom, HttpStatus.CREATED);
                  }else {
-                     responseCustom = new ResponseCustom(HttpStatus.CONTINUE.value(), HttpStatus.CONTINUE.getReasonPhrase(), null);
-                     return new ResponseEntity<>(responseCustom, HttpStatus.CONTINUE);
+                     responseCustom = new ResponseCustom(HttpStatus.BAD_REQUEST.value(), "Add category failed. Category is exited", null);
+                     return new ResponseEntity<>(responseCustom, HttpStatus.BAD_REQUEST);
                  }
             }
 
@@ -98,7 +130,7 @@ public class CategoryController {
             }else {
                 Boolean isDelete = categoryService.deleteCategory(id);
                 if (isDelete) {
-                    responseCustom = new ResponseCustom(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), null);
+                    responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Delete category done", null);
                     return new ResponseEntity<>(responseCustom, HttpStatus.OK);
                 }else {
                     responseCustom = new ResponseCustom(HttpStatus.CONFLICT.value(), HttpStatus.CONFLICT.getReasonPhrase(), null);
@@ -106,9 +138,13 @@ public class CategoryController {
                 }
             }
 
+
         }catch (Exception e) {
-            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), null);
+            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Please remove products that are using the title, before deleting the title", null);
             return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
 }

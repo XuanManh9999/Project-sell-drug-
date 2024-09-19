@@ -68,9 +68,20 @@ public class CategoryServiceImpl implements ICategory {
     }
 
     @Override
-    public Page<Category> getCategories(Pageable pageable) {
+    public Page<CategoryDTO> getCategories(Pageable pageable) {
         Page<Category> categoryPage = categoryRepository.findAll(pageable);
-        return categoryPage.map(user -> modelMapper.map(user, Category.class));
+        return categoryPage.map(category -> modelMapper.map(category, CategoryDTO.class));
+    }
+
+    @Override
+    public CategoryDTO getCategoryById(Long id) {
+        Optional<Category> category = categoryRepository.findById(id);
+        return category.map(value -> modelMapper.map(value, CategoryDTO.class)).orElse(null);
+    }
+
+    @Override
+    public List<CategoryDTO> getNameAndIdCategories() {
+        return categoryRepository.findAllCategoryIdAndName();
     }
 
 

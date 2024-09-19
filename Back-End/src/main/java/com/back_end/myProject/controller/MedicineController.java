@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1")
 public class MedicineController {
@@ -34,6 +36,32 @@ public class MedicineController {
             return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+        @GetMapping("/medicines-f")
+    public ResponseEntity<?> findByField(
+//            @RequestParam(name = "name", required = false) String name,
+//            @RequestParam(name = "quantity", required = false) Double quantity,
+//            @RequestParam(name = "composition", required = false) String composition,
+//            @RequestParam(name = "dosage", required = false) String dosage,
+//            @RequestParam(name = "formulation", required = false) String formulation,
+//            @RequestParam(name = "usage_instructions", required = false) String usage_instructions,
+//            @RequestParam(name = "url_image", required = false) String url_image,
+//            @RequestParam(name ="id_category", required = false) Long id_category
+            @ModelAttribute MedicineDTO medicineDTO
+    ) {
+        ResponseCustom responseCustom = null;
+        try {
+            List<MedicineDTO> medicineDTOS = IMedicineService.findByField(medicineDTO);
+            responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Medicine retrieved", medicineDTOS);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }catch (Exception ex) {
+            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), ex);
+            return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
 
     // Lấy chi tiết một thuốc theo ID
     @GetMapping("/medicines/{id}")
@@ -74,11 +102,10 @@ public class MedicineController {
     }
 
     // Cập nhật một thuốc theo ID
-    @PutMapping("/medicines/{id}")
-    public ResponseEntity<?> updateMedicine(@PathVariable Long id, @RequestBody MedicineDTO medicineDTO) {
+    @PutMapping("/medicines")
+    public ResponseEntity<?> updateMedicine( @RequestBody MedicineDTO medicineDTO) {
         ResponseCustom responseCustom;
         try {
-            medicineDTO.setId(id);
             boolean isUpdated = IMedicineService.updateMedicine(medicineDTO);
             if (isUpdated) {
                 responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Medicine updated successfully", null);
@@ -111,4 +138,8 @@ public class MedicineController {
             return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
+
 }
