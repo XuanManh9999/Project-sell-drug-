@@ -10,6 +10,8 @@ const PATH = {
   MANAGE_MONEY: "quan-ly-doanh-thu", // Không có dấu "/",
   MANAGE_MEDICINE: "quan-ly-thuoc",
   MANAGE_CATEGORY: "quan-ly-loai-thuoc",
+  MANAGE_BILL: "quan-ly-hoa-don",
+  MANAGE_REVENUE: "quan-ly-doanh-thu",
 };
 
 export default PATH;

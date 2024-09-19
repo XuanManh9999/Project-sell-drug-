@@ -3,7 +3,7 @@ import "../../styles/register.css";
 import { Link } from "react-router-dom";
 import { register } from "../../services/api-user";
 import { validateEmail } from "../../utils/utils-func";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function Register() {
   const [data, setData] = useState({});
@@ -95,18 +95,6 @@ function Register() {
           </p>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </div>
   );
 }

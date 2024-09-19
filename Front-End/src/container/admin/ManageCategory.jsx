@@ -201,8 +201,7 @@ function ManageCategory() {
               </tr>
             </thead>
             <tbody>
-              {responseData &&
-                responseData.length > 0 &&
+              {responseData && responseData.length > 0 ? (
                 responseData?.map((category) => (
                   <tr key={category.id}>
                     <td>{category.id}</td>
@@ -221,7 +220,18 @@ function ManageCategory() {
                       </button>
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colspan="4"
+                    style={{
+                      textAlign: "center",
+                    }}>
+                    Không có dữ liệu
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

@@ -261,7 +261,7 @@ function ManageUser() {
               </tr>
             </thead>
             <tbody>
-              {users &&
+              {users && users.length > 0 ? (
                 users.map((user) => (
                   <tr key={user.id}>
                     <td>{user.id}</td>
@@ -282,7 +282,18 @@ function ManageUser() {
                       </button>
                     </td>
                   </tr>
-                ))}
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colspan="6"
+                    style={{
+                      textAlign: "center",
+                    }}>
+                    Không có dữ liệu
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

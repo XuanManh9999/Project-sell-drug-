@@ -22,10 +22,25 @@
     font-weight: 600;
 }
 
-.flex-row-container-manager-user input {
+
+
+.flex-row-container-manager-user input,
+textarea {
     height: 25px;
     width: 99%;
 }
+.flex-row-container-manager-user textarea {
+    max-width: 99%;
+    min-height: 50px;
+    max-height: 100px;
+}
+
+select {
+    height: 31px;
+    width: 50%;
+}
+
+
 
 /* Nút và hành động quản lý người dùng */
 .action-manage-user {

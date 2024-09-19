@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import MainToast from "../../utils/MainToast";
 import { login } from "../../services/api-user";
 import { validateEmail } from "../../utils/utils-func";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function Login() {
   const [data, setData] = useState({});
@@ -87,18 +87,6 @@ function Login() {
           <Link to="/quen-mat-khau">Quên mật khẩu?</Link>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={1500}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </div>
   );
 }

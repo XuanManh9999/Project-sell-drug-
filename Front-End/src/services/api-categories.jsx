@@ -48,11 +48,20 @@ const getCategoryById = async (id) => {
     return error.response.data;
   }
 };
-
+const getCategoriesForm = async () => {
+  let response;
+  try {
+    response = await AxiosConFig.get(`/categories-load`);
+    return response?.data || {};
+  } catch (error) {
+    return error.response.data;
+  }
+};
 export {
   getAllCategories,
   createCategory,
   updateCategory,
   deleteCategory,
   getCategoryById,
+  getCategoriesForm,
 };

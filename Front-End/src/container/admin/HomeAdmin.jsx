@@ -23,8 +23,8 @@ function HomeAdmin() {
           <Link to={PATH.MANAGE_USER}>Quản lý người dùng</Link>
           <Link to={PATH.MANAGE_CATEGORY}>Quản lý loại thuốc</Link>
           <Link to={PATH.MANAGE_MEDICINE}>Quản lý thuốc</Link>
-          <Link to={PATH.MANAGE_BILL}>Quản lý đơn thuốc</Link>
           <Link to={PATH.MANAGE_BILL}>Quản lý hóa đơn</Link>
+          <Link to={PATH.MANAGE_BILL}>Thống kê doanh thu</Link>
         </div>
         <div className="navbar-user">
           <span className="username">Xin chào, Admin</span>
