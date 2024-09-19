@@ -3,7 +3,6 @@ import "../../styles/home-admin.css";
 import PATH from "../../utils/utils-url-route";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 function HomeAdmin() {
   const location = useLocation(); // Lấy thông tin location
 
@@ -22,6 +21,8 @@ function HomeAdmin() {
         </Link>
         <div className="navbar-menu">
           <Link to={PATH.MANAGE_USER}>Quản lý người dùng</Link>
+          <Link to={PATH.MANAGE_CATEGORY}>Quản lý loại thuốc</Link>
+          <Link to={PATH.MANAGE_MEDICINE}>Quản lý thuốc</Link>
           <Link to={PATH.MANAGE_BILL}>Quản lý đơn thuốc</Link>
           <Link to={PATH.MANAGE_BILL}>Quản lý hóa đơn</Link>
         </div>

@@ -11,6 +11,7 @@ import {
 import { validateEmail, isVietnamesePhoneNumber } from "../../utils/utils-func";
 import { toast } from "react-toastify";
 import ReactPaginate from "react-paginate";
+import CONST from "../../utils/utils-const";
 
 function ManageUser() {
   const handleBtn = useRef(null);
@@ -22,14 +23,12 @@ function ManageUser() {
     phone: "",
     password: "",
   });
+
   const [isDeleteUser, setIsDeleteUser] = useState(false);
   const [isSubmit, setIsSubmit] = useState(false);
   const [users, setUsers] = useState([]);
   const [pageCount, setPageCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
-
-  const itemsPerPage = 2; // Số lượng mục trên mỗi trang
-
   // Hàm xử lý thay đổi input
   const handleInputOnChange = (event) => {
     const { name, value } = event.target;
@@ -42,14 +41,12 @@ function ManageUser() {
   // Hàm lấy dữ liệu người dùng
   const fetchDataUsers = async (page = 0) => {
     try {
-      const response = await getUsers(page, itemsPerPage); // Thay đổi để hỗ trợ phân trang
+      const response = await getUsers(page, CONST.ITEMS_PERPAGE); // Thay đổi để hỗ trợ phân trang
       if (response && response.error == null) {
         setUsers(response.data.data.content);
         setPageCount(
-          Math.ceil(response.data.data.totalElements / itemsPerPage)
+          Math.ceil(response.data.data.totalElements / CONST.ITEMS_PERPAGE)
         ); // Cập nhật số trang
-      } else {
-        toast.error(response.error?.message || "Failed to fetch users");
       }
     } catch (error) {
       toast.error("An error occurred while fetching users");
@@ -80,7 +77,7 @@ function ManageUser() {
         const response = await deleteUserById(id);
         if (response && response.code === 200) {
           toast.success(response.message);
-          setIsDeleteUser((prev) => !prev); // Cập nhật để trigger useEffect
+          setIsSubmit((prev) => !prev);
         } else {
           toast.error(response.message);
         }
@@ -91,7 +88,6 @@ function ManageUser() {
       toast.warn("ID does not exist");
     }
   };
-
   // UseEffect để lấy dữ liệu khi component mount hoặc khi có thay đổi từ delete hoặc submit
   useEffect(() => {
     fetchDataUsers(currentPage);
@@ -136,7 +132,7 @@ function ManageUser() {
             phone: "",
             password: "",
           });
-          handleBtn.current.textContent = "Add User";
+          handleBtn.current.textContent = "Thêm người dùng";
           handleBtn.current.style.background = "#008CBA";
         } else {
           toast.error(response.message);
@@ -175,7 +171,7 @@ function ManageUser() {
 
   return (
     <>
-      <h1 className="title-manage-user">Manage User</h1>
+      <h1 className="title-manage-user">Quản lý người dùng</h1>
       <div className="container-manager-user">
         <div className="flex-row-container-manager-user">
           <label>ID: </label>
@@ -243,7 +239,7 @@ function ManageUser() {
           className="btn-submid-manage-user"
           onClick={handleSubmit}
           ref={handleBtn}>
-          Add User
+          Thêm người dùng
         </button>
         <Link
           className="btn-submid-manage-user back-to-home-manage-user"
