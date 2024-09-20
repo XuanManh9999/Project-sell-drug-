@@ -1,0 +1,46 @@
+.table-manage-user {
+    width: 100%;
+    /* Chiếm toàn bộ chiều rộng */
+    border-collapse: collapse;
+    /* Gộp các viền ô lại với nhau */
+}
+
+.table-manage-user th,
+.table-manage-user td {
+    vertical-align: middle;
+    /* Căn giữa theo chiều dọc */
+    text-align: center;
+    /* Căn giữa theo chiều ngang */
+    padding: 10px;
+    /* Thêm khoảng đệm */
+    border: 1px solid #ccc;
+    /* Viền cho các ô */
+}
+
+.table-manage-user img {
+    max-height: 100px;
+    /* Chiều cao tối đa cho hình ảnh */
+    object-fit: contain;
+    /* Giữ tỷ lệ hình ảnh */
+}
+
+.action-buttons {
+    display: flex;
+    /* Sử dụng Flexbox cho các button */
+    justify-content: center;
+    /* Căn giữa các button */
+}
+
+.btn-edit,
+.btn-delete {
+    min-width: 80px;
+    /* Chiều rộng tối thiểu cho nút */
+    min-height: 30px;
+    /* Chiều cao tối thiểu cho nút */
+    padding: 5px;
+    /* Thêm khoảng đệm cho nút */
+    margin: 0 5px;
+    /* Khoảng cách giữa các button */
+    cursor: pointer;
+    /* Hiển thị con trỏ khi hover */
+}

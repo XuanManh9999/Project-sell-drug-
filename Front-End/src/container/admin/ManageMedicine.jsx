@@ -47,8 +47,6 @@ function ManageMedicine() {
   useEffect(() => {
     const fetchData = async () => {
       const response = await getAllMedicine(currentPage, CONST.ITEMS_PERPAGE);
-      console.log("Xuan manh check response", response);
-
       setDataResponse(response?.data?.content ?? []);
       setPageCount(
         Math.ceil(response.data.totalElements / CONST.ITEMS_PERPAGE)
@@ -169,8 +167,13 @@ function ManageMedicine() {
     }
   };
   const handleSearch = async () => {
-    const response = await searchMedicine(data);
-    console.log(response);
+    const { code, message, data: dataSearch } = await searchMedicine(data);
+
+    if (code && code == 200) {
+      setDataResponse(dataSearch);
+    } else {
+      toast.error(message);
+    }
   };
 
   return (
@@ -301,7 +304,7 @@ function ManageMedicine() {
                 <th>Composition</th>
                 <th>Dosage</th>
                 <th>Formulation</th>
-                <th>Url_image</th>
+                <th>Image</th>
                 <th>Type Category</th>
                 <th>Action</th>
               </tr>
@@ -316,8 +319,16 @@ function ManageMedicine() {
                     <td>{medicine.composition}</td>
                     <td>{medicine.dosage}</td>
                     <td>{medicine.formulation}</td>
-                    <td>{medicine.url_image}</td>
-                    <td>{medicine?.categoryDTO?.name}</td>
+                    <td>
+                      <img
+                        className="img-thuoc-config"
+                        src={medicine.url_image}
+                        alt={medicine.name}
+                      />
+                    </td>
+                    <td>
+                      {medicine?.categoryDTO?.name ?? medicine?.name_category}
+                    </td>
                     <td className="action-buttons">
                       <button
                         className="btn-edit"
