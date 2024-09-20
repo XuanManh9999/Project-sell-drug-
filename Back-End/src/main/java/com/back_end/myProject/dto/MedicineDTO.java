@@ -17,6 +17,7 @@ public class MedicineDTO {
     private String url_image;
     private String usage_instructions;
     private Integer status;
+    private String name_category;
     private Long id_category;
     private CategoryDTO categoryDTO;
     private List<DetailBill> detailBills;
