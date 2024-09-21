@@ -55,14 +55,13 @@ public class MedicineRepositoryImpl implements IMedicineRepository {
         // Lặp qua các kết quả và chuyển đổi chúng thành DTO
         List<Object[]> results = query.getResultList();
         for (Object[] row : results) {
-            // Giả sử các cột được trả về theo thứ tự như sau: id, name, quantity, composition, dosage, formulation, id_category
-            Long id = ((Number) row[0]).longValue(); // id
-            String name = (String) row[1]; // name
-            Double quantity = ((Number) row[2]).doubleValue(); // quantity
-            String composition = (String) row[3]; // composition
-            String dosage = ((String) row[4]); // dosage
-            String formulation = (String) row[5]; // formulation
-            Long idCategory = ((Number) row[6]).longValue(); // id_category
+            Long id = ((Number) row[0]).longValue();
+            String name = (String) row[1];
+            Double quantity = ((Number) row[2]).doubleValue();
+            String composition = (String) row[3];
+            String dosage = ((String) row[4]);
+            String formulation = (String) row[5];
+            Long idCategory = ((Number) row[6]).longValue();
             String name_category = (String) row[7];
             String url_image = (String) row[8];
             MedicineDTO dto = new MedicineDTO();

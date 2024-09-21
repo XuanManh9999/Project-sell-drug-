@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/")
 public class BillController {
@@ -25,7 +27,7 @@ public class BillController {
     public ResponseEntity<?> getAllBills(Pageable pageable) {
         ResponseCustom responseCustom;
         try {
-            Page<Bill> bills = billService.getAllBills(pageable);
+            Page<BillDTO> bills = billService.getAllBills(pageable);
             responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Get All Bills", bills);
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
         }catch (Exception ex) {
@@ -33,6 +35,34 @@ public class BillController {
             return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping(value = "/bill/{id}")
+    public ResponseEntity<?> getBillById(@PathVariable(name = "id") Long id) {
+        ResponseCustom responseCustom;
+        try {
+            BillDTO billDTO = billService.findBillById(id);
+            responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Get Bill by ID", billDTO);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }catch (Exception ex) {
+            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping(value = "/search-bill")
+    public ResponseEntity<?> searchBill(@ModelAttribute BillDTO billDTO) {
+        ResponseCustom  responseCustom;
+        try {
+            List<BillDTO> billDTOList = billService.searchBill(billDTO);
+            responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Search Bill", billDTOList);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }catch (Exception ex) {
+            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
     @PostMapping(value = "/bill")
     public ResponseEntity<?> addBill(@RequestBody BillDTO billDTO) {
         ResponseCustom responseCustom;

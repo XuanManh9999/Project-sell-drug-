@@ -4,6 +4,8 @@ package com.back_end.myProject.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class BillDTO {
@@ -12,5 +14,6 @@ public class BillDTO {
     private Integer status;
     private String customer_phone;
     private String customer_name;
+    private Integer quantity_product;
     private Object detailBill;
 }

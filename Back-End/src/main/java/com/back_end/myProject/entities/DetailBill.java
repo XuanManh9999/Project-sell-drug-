@@ -1,6 +1,7 @@
 package com.back_end.myProject.entities;
 
 import com.back_end.myProject.dto.DetailBillDTO;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -26,8 +27,9 @@ public class DetailBill  {
     @JoinColumn(name = "id_medicine")
     private Medicine medicine;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_bill")
+    @JsonBackReference // Ngăn chặn chu kỳ trong JSON serialization
     private Bill bill;
 
 

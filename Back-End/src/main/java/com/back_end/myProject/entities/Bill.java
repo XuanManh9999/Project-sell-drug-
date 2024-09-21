@@ -1,5 +1,6 @@
 package com.back_end.myProject.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,10 +21,10 @@ public class Bill {
     private Integer status;
     @Column(name = "customer_phone")
     private String customer_phone;
-
     @Column(name = "customer_name")
     private String customerName;
 
-    @OneToMany(mappedBy = "bill")
+    @OneToMany(mappedBy = "bill", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference
     private List<DetailBill> listDetailBill;
 }

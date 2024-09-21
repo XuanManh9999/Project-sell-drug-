@@ -8,6 +8,7 @@ import com.back_end.myProject.entities.Medicine;
 import com.back_end.myProject.repositorys.BillRepository;
 import com.back_end.myProject.repositorys.MedicineRepository;
 import com.back_end.myProject.service.IBill;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class BillServiceImpl implements IBill {
@@ -38,19 +40,20 @@ public class BillServiceImpl implements IBill {
         bill.setCustomer_phone(billDTO.getCustomer_phone());
         bill.setStatus(1);
 
-        List<DetailBillDTO> detailBillDTOS = (List<DetailBillDTO>) billDTO.getDetailBill();
-        List<DetailBill> detailBills = new ArrayList<>();
-        for (DetailBillDTO detailBillDTO : detailBillDTOS) {
-            DetailBill detailBill = new DetailBill();
-            detailBill.setQuantity(detailBillDTO.getQuantity());
-            Optional<Medicine> medicine = medicineRepository.findById(detailBillDTO.getId_medicine());
-            detailBill.setMedicine(medicine.orElse(new Medicine()));
-            detailBill.setStatus(1);
-            detailBill.setBill(bill);  // Liên kết DetailBill với Bill
-            detailBills.add(detailBill);
+        if (bill.getListDetailBill() != null) {
+            List<DetailBillDTO> detailBillDTOS = (List<DetailBillDTO>) billDTO.getDetailBill();
+            List<DetailBill> detailBills = new ArrayList<>();
+            for (DetailBillDTO detailBillDTO : detailBillDTOS) {
+                DetailBill detailBill = new DetailBill();
+                detailBill.setQuantity(detailBillDTO.getQuantity());
+                Optional<Medicine> medicine = medicineRepository.findById(detailBillDTO.getId_medicine());
+                detailBill.setMedicine(medicine.orElse(new Medicine()));
+                detailBill.setStatus(1);
+                detailBill.setBill(bill);  // Liên kết DetailBill với Bill
+                detailBills.add(detailBill);
+            }
+            bill.setListDetailBill(detailBills);
         }
-
-        bill.setListDetailBill(detailBills);
         Bill savedBill = billRepository.save(bill);
         // Kiểm tra xem bill đã được lưu thành công chưa (thông qua ID hoặc thuộc tính khác)
         return savedBill.getId() != null;
@@ -87,8 +90,56 @@ public class BillServiceImpl implements IBill {
 
 
     @Override
-    public Page<Bill> getAllBills(Pageable pageable) {
-        Page<Bill> BillsPage = billRepository.findAll(pageable);
-        return BillsPage.map(bill -> modelMapper.map(bill, Bill.class));
+    public Page<BillDTO> getAllBills(Pageable pageable) {
+        // Lấy trang dữ liệu Bill từ repository
+        Page<Bill> billsPage = billRepository.findAll(pageable);
+
+        // Ánh xạ từng Bill sang BillDTO và bao gồm cả danh sách DetailBillDTO
+        return billsPage.map(bill -> {
+            // Ánh xạ Bill sang BillDTO
+            BillDTO billDTO = modelMapper.map(bill, BillDTO.class);
+            billDTO.setCustomer_name(bill.getCustomerName());
+
+            // Ánh xạ danh sách DetailBill sang DetailBillDTO
+            List<DetailBillDTO> detailBillDTOS = bill.getListDetailBill().stream()
+                    .map(detailBill -> modelMapper.map(detailBill, DetailBillDTO.class))
+                    .collect(Collectors.toList());
+
+            // Gán danh sách DetailBillDTO vào BillDTO
+            billDTO.setDetailBill(detailBillDTOS);
+
+            return billDTO;
+        });
     }
+
+
+    @Override
+    public BillDTO findBillById(Long id) {
+        Optional<Bill> billOpt = billRepository.findById(id); // Tìm bill theo id
+        if (billOpt.isPresent()) {
+            Bill bill = billOpt.get();
+
+            // Sử dụng modelMapper để ánh xạ dữ liệu từ Bill sang BillDTO
+            BillDTO billDTO = modelMapper.map(bill, BillDTO.class);
+
+            // Ánh xạ danh sách DetailBill sang DetailBillDTO
+            List<DetailBillDTO> detailBillDTOS = bill.getListDetailBill().stream()
+                    .map(detailBill -> modelMapper.map(detailBill, DetailBillDTO.class))
+                    .collect(Collectors.toList());
+            billDTO.setCustomer_name(bill.getCustomerName());
+            // Gán danh sách DetailBillDTO vào BillDTO
+            billDTO.setDetailBill(detailBillDTOS);
+
+            return billDTO;
+        } else {
+            // Nên xử lý tình huống không tìm thấy bill (có thể ném ngoại lệ hoặc trả về giá trị khác)
+            throw new EntityNotFoundException("Bill not found with id: " + id);
+        }
+    }
+
+    @Override
+    public List<BillDTO> searchBill(BillDTO billDTO) {
+        return billRepository.searchBill(billDTO);
+    }
+
 }
