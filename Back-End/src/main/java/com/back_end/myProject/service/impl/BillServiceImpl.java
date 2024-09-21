@@ -6,58 +6,73 @@ import com.back_end.myProject.entities.Bill;
 import com.back_end.myProject.entities.DetailBill;
 import com.back_end.myProject.entities.Medicine;
 import com.back_end.myProject.repositorys.BillRepository;
+import com.back_end.myProject.repositorys.DetailBillRepository;
 import com.back_end.myProject.repositorys.MedicineRepository;
 import com.back_end.myProject.service.IBill;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class BillServiceImpl implements IBill {
 
+    private final DetailBillRepository detailBillRepository;
     private final ModelMapper modelMapper;
     private final BillRepository billRepository;
     private final MedicineRepository medicineRepository;
-    public BillServiceImpl(BillRepository billRepository, MedicineRepository medicineRepository, ModelMapper modelMapper)
+    public BillServiceImpl(BillRepository billRepository, MedicineRepository medicineRepository, ModelMapper modelMapper, DetailBillRepository detailBillRepository)
     {
         this.billRepository = billRepository;
         this.modelMapper = new ModelMapper();
         this.medicineRepository = medicineRepository;
+        this.detailBillRepository = detailBillRepository;
     }
 
     @Override
-    public boolean creayeBill(BillDTO billDTO) {
+    public boolean createBill(BillDTO billDTO) {
         Bill bill = new Bill();
         bill.setName(billDTO.getName());
         bill.setCustomerName(billDTO.getCustomer_name());
         bill.setCustomer_phone(billDTO.getCustomer_phone());
         bill.setStatus(1);
 
-        if (bill.getListDetailBill() != null) {
-            List<DetailBillDTO> detailBillDTOS = (List<DetailBillDTO>) billDTO.getDetailBill();
-            List<DetailBill> detailBills = new ArrayList<>();
+        // Lưu hóa đơn trước khi thêm chi tiết hóa đơn
+        Bill savedBill = billRepository.save(bill);
+
+        if (billDTO.getDetailBills() != null) {
+           List<DetailBillDTO> detailBillDTOS = billDTO.getDetailBills();
             for (DetailBillDTO detailBillDTO : detailBillDTOS) {
                 DetailBill detailBill = new DetailBill();
-                detailBill.setQuantity(detailBillDTO.getQuantity());
+                // Tìm thuốc theo ID
                 Optional<Medicine> medicine = medicineRepository.findById(detailBillDTO.getId_medicine());
-                detailBill.setMedicine(medicine.orElse(new Medicine()));
-                detailBill.setStatus(1);
-                detailBill.setBill(bill);  // Liên kết DetailBill với Bill
-                detailBills.add(detailBill);
+                if (medicine.isPresent()) {
+                    detailBill.setMedicine(medicine.get());
+                    detailBill.setQuantity(detailBillDTO.getQuantity());
+                    detailBill.setBill(savedBill);  // Gán hóa đơn đã lưu
+                    detailBill.setStatus(1);
+                    detailBillRepository.save(detailBill);
+                } else {
+                    // Xử lý khi không tìm thấy thuốc, có thể thêm thông báo lỗi
+                    System.out.println("Không tìm thấy thuốc với ID: " + detailBillDTO.getId_medicine());
+                }
             }
-            bill.setListDetailBill(detailBills);
         }
-        Bill savedBill = billRepository.save(bill);
-        // Kiểm tra xem bill đã được lưu thành công chưa (thông qua ID hoặc thuộc tính khác)
+
+        // Kiểm tra xem bill đã được lưu thành công chưa
         return savedBill.getId() != null;
     }
+
 
     @Override
     public boolean updateBill(BillDTO billDTO) {

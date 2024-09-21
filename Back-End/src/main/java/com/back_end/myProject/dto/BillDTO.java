@@ -16,4 +16,5 @@ public class BillDTO {
     private String customer_name;
     private Integer quantity_product;
     private Object detailBill;
+    private List<DetailBillDTO> detailBills;
 }

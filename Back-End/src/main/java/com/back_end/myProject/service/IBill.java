@@ -8,7 +8,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IBill {
-    boolean creayeBill(BillDTO billDTO);
+    boolean createBill(BillDTO billDTO);
     boolean updateBill(BillDTO billDTO);
     boolean deleteBill(Long id);
     Page<BillDTO> getAllBills(Pageable pageable);

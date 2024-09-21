@@ -37,10 +37,13 @@ public class MedicineServiceImpl implements IMedicine {
         medicine.setQuantity(medicineDTO.getQuantity());
         medicine.setStatus(1);
         medicine.setDosage(medicineDTO.getDosage());
-        Optional<Category> category = categoryRepository.findById((Long) medicineDTO.getId_category());
-        category.ifPresent(medicine::setCategory);
+        if ( medicineDTO.getId_category() != null) {
+            Optional<Category> category = categoryRepository.findById((Long) medicineDTO.getId_category());
+            category.ifPresent(medicine::setCategory);
+        }
         medicine.setFormulation(medicineDTO.getFormulation());
         medicine.setComposition(medicineDTO.getComposition());
+        medicine.setPrice(medicineDTO.getPrice());
         medicine.setUrl_image(medicineDTO.getUrl_image());
         medicine.setUsage_instructions(medicineDTO.getUsage_instructions());
         medicineRepository.save(medicine);
@@ -89,6 +92,7 @@ public class MedicineServiceImpl implements IMedicine {
             medicine.setDosage(medicineDTO.getDosage());
             medicine.setComposition(medicineDTO.getComposition());
             medicine.setFormulation(medicineDTO.getFormulation());
+            medicine.setPrice(medicineDTO.getPrice());
             medicine.setUrl_image(medicineDTO.getUrl_image());
             medicine.setUsage_instructions(medicineDTO.getUsage_instructions());
             if (medicineDTO.getId_category() != null) {

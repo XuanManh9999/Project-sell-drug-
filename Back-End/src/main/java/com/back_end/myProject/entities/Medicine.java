@@ -21,6 +21,8 @@ public class Medicine {
     @Column(name = "quantity")
     private Double quantity;
 
+    @Column(name = "price")
+    private Double price;
 
     @Column(name = "composition")
     private String composition;

@@ -13,6 +13,7 @@ public class MedicineDTO {
     private Double quantity;
     private String composition;
     private String dosage;
+    private Double price;
     private String formulation;
     private String url_image;
     private String usage_instructions;

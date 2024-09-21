@@ -76,7 +76,7 @@ public class BillController {
                 return new ResponseEntity<>(responseCustom, HttpStatus.BAD_REQUEST);
             }
 
-            Boolean isCreate = billService.creayeBill(billDTO);
+            Boolean isCreate = billService.createBill(billDTO);
             if (isCreate) {
                 responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Bill created successfully", HttpStatus.OK.getReasonPhrase());
                 return new ResponseEntity<>(responseCustom, HttpStatus.OK);
