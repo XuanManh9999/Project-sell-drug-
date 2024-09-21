@@ -30,7 +30,7 @@
     justify-content: center;
     /* Căn giữa các button */
 }
-
+.btn-viewdetail,
 .btn-edit,
 .btn-delete {
     min-width: 80px;
@@ -43,4 +43,10 @@
     /* Khoảng cách giữa các button */
     cursor: pointer;
     /* Hiển thị con trỏ khi hover */
+}
+.btn-viewdetail {
+    background-color: orange;
+    /* Màu nền */
+    color: white;
+    border: none;
 }

@@ -33,8 +33,6 @@ const deleteMedicineById = async (id) => {
 const searchMedicine = async (params) => {
   let response;
   try {
-    console.log("CALL");
-
     response = await AxiosConFig.get(`medicines-f`, { params });
     return response?.data || {};
   } catch (error) {
