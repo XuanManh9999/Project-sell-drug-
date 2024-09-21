@@ -3,6 +3,7 @@ import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
 import "../../styles/manage-medicine.css";
 import { Link } from "react-router-dom";
+import BoxModel from "../public/Boxmodel";
 import {
   getAllBill,
   getBillById,
@@ -21,6 +22,9 @@ function ManageBill() {
   const [currentPage, setCurrentPage] = useState(0);
   const [isSubmit, setIsSubmit] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const [detailBill, setDetailBill] = useState([]); // Lưu chi tiết hóa đơn
+  const [isShowModel, setIsShowModel] = useState(false); // Trạng thái hiển thị model
+  const [isSendCreate, setIsSendCreate] = useState(false); // Trạng thái gửi request tạo hóa đơn
   // Hàm xử lý thay đổi input
   const handleInputOnChange = (event) => {
     const { name, value } = event.target;
@@ -96,14 +100,7 @@ function ManageBill() {
       return;
     }
     if (handleBtn.current.textContent == "Thêm hóa đơn" && id == null) {
-      const { code, message } = await createBill(data);
-      if (code === 200) {
-        toast.success(message);
-        setIsSubmit(!isSubmit);
-      } else {
-        toast.error(message);
-      }
-      setData({});
+      setIsShowModel(true);
     } else {
       const { code, message } = await updateBill(data);
       if (code === 200) {
@@ -130,8 +127,6 @@ function ManageBill() {
       toast.error(data_search.error?.message || "Failed to fetch categories");
     }
   };
-
-  const quantityProdyct = () => {};
 
   return (
     <>
@@ -265,6 +260,14 @@ function ManageBill() {
             activeClassName={"pagination-active"}
           />
         </div>
+        {isShowModel && (
+          <BoxModel
+            setIsShowModel={setIsShowModel}
+            data={data}
+            setIsSubmit={setIsSubmit}
+            setData={setData}
+          />
+        )}
       </div>
     </>
   );

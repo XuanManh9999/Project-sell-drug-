@@ -211,6 +211,16 @@ function ManageMedicine() {
           />
         </div>
         <div className="flex-row-container-manager-user">
+          <label>Price: </label>
+          <input
+            type="number"
+            name="price"
+            placeholder="Nhập vào price..."
+            onChange={handleInputOnChange}
+            value={data.price || ""}
+          />
+        </div>
+        <div className="flex-row-container-manager-user">
           <label>Composition: </label>
           <input
             type="text"
@@ -240,16 +250,6 @@ function ManageMedicine() {
             value={data.formulation || ""}
           />
         </div>
-        <div className="flex-row-container-manager-user">
-          <label>Usage_instructions: </label>
-          <textarea
-            type="text"
-            name="usage_instructions"
-            placeholder="Nhập vào usage_instructions..."
-            onChange={handleInputOnChange}
-            value={data.usage_instructions || ""}
-          />
-        </div>
 
         <div className="flex-row-container-manager-user">
           <label>Url_image: </label>
@@ -276,6 +276,16 @@ function ManageMedicine() {
               ))}
           </select>
         </div>
+        <div className="flex-row-container-manager-user">
+          <label>Usage_instructions: </label>
+          <textarea
+            type="text"
+            name="usage_instructions"
+            placeholder="Nhập vào usage_instructions..."
+            onChange={handleInputOnChange}
+            value={data.usage_instructions || ""}
+          />
+        </div>
       </div>
       <div className="action-manage-user">
         <button
@@ -301,6 +311,7 @@ function ManageMedicine() {
                 <th>ID</th>
                 <th>Name</th>
                 <th>Quantity</th>
+                <th>Price</th>
                 <th>Composition</th>
                 <th>Dosage</th>
                 <th>Formulation</th>
@@ -316,6 +327,7 @@ function ManageMedicine() {
                     <td>{medicine.id}</td>
                     <td>{medicine.name}</td>
                     <td>{medicine.quantity}</td>
+                    <td>{medicine.price}</td>
                     <td>{medicine.composition}</td>
                     <td>{medicine.dosage}</td>
                     <td>{medicine.formulation}</td>
@@ -346,7 +358,7 @@ function ManageMedicine() {
               ) : (
                 <tr>
                   <td
-                    colSpan="9"
+                    colSpan="10"
                     style={{
                       textAlign: "center",
                     }}>

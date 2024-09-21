@@ -1,0 +1,123 @@
+/* Main container styling */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    max-height: 60vh;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: absolute;
+    left: 50%;
+    right: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+}
+
+/* Header styling */
+.container-header {
+    margin-bottom: 20px;
+}
+
+.container-header h2 {
+    margin: 0;
+    text-align: center;
+}
+
+/* Data section (with scroll) */
+.container-section-data {
+    width: 100%;
+    overflow-x: auto;
+    /* Enable horizontal scrolling */
+    margin-bottom: 20px;
+}
+
+.product-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ccc;
+}
+
+th,
+td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+input,
+textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+textarea {
+    resize: none;
+    height: 50px;
+}
+
+/* Footer section with buttons */
+.container-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.submit-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.close-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+/* Ensure proper scroll when content overflows */
+.container-section-data {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.product-table>tbody tr {
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.product-table>tbody tr td input[type="checkbox"] {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+.product-table>tbody tr td:first-child {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

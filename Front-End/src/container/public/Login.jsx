@@ -83,8 +83,8 @@ function Login() {
         </button>
         <div className="links">
           <Link to="/dang-ky">Đăng ký</Link>
-          <span> | </span>
-          <Link to="/quen-mat-khau">Quên mật khẩu?</Link>
+          {/* <span> | </span>
+          <Link to="/quen-mat-khau">Quên mật khẩu?</Link> */}
         </div>
       </div>
     </div>
