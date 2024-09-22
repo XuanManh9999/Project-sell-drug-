@@ -27,6 +27,10 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+    // GET -> YEU CAU LAY DU LIEU
+    // POST ->  YEU CAU THEM DU LIEU
+    // PUT -> YEU CAU CAP NHAT DU LIEU
+    // DELETE -> YEU CAU XOA DU LIEU
 
     @PostMapping("")
     public ResponseEntity<ResponseCustom> createUser (@RequestBody UserDTO userDTO) {
@@ -41,6 +45,7 @@ public class UserController {
             }
             boolean IsCreate = userService.createUser(userDTO);
             if (IsCreate) {
+                // 201
                 responseCustom = new ResponseCustom(HttpStatus.CREATED.value(), "User created", null);
                 return ResponseEntity.status(HttpStatus.CREATED).body(responseCustom);
             }else {

@@ -140,9 +140,9 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> user = userRepository.findByEmail(userDTO.getEmail());
         if (user.isPresent()) {
-            return false;
+            return false;// da co tai khoan do roi, khong can tao them nua
         }
-        User newUser = mapper.map(userDTO, User.class);
+        User newUser = mapper.map(userDTO, User.class);// m
         userRepository.save(newUser);
         return true;
     }

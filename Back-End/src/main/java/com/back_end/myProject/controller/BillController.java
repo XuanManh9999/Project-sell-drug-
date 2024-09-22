@@ -171,8 +171,4 @@ public class BillController {
             return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
-
-
 }

@@ -57,7 +57,6 @@ public class MedicineServiceImpl implements IMedicine {
 
         return medicines.map(medicine -> {
             MedicineDTO medicineDTO = modelMapper.map(medicine, MedicineDTO.class);
-
             // Kiểm tra và map Category nếu tồn tại
             if (medicine.getCategory() != null) {
                 CategoryDTO categoryDTO = modelMapper.map(medicine.getCategory(), CategoryDTO.class);

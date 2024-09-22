@@ -5,6 +5,9 @@ import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+// spring -> spring-boot, spring data jpa
+
 @Configuration
 public class ModelMapperConfig {
     @Bean
@@ -15,5 +18,4 @@ public class ModelMapperConfig {
                 .setMatchingStrategy(MatchingStrategies.STRICT); // Khớp với toàn bộ code
         return modelMapper;
     }
-
 }
