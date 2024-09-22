@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "../../styles/manage-user.css";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";// Hooks
 import {
   getUsers,
   deleteUserById,
@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 import ReactPaginate from "react-paginate";
 import CONST from "../../utils/utils-const";
 
+// UI NGUOI DUNG
 function ManageUser() {
   const handleBtn = useRef(null);
   const [data, setData] = useState({

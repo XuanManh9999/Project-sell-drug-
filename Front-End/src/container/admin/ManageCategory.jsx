@@ -11,6 +11,9 @@ import {
   updateCategory,
 } from "../../services/api-categories";
 import CONST from "../../utils/utils-const";
+
+// UI loai thuoc
+
 function ManageCategory() {
   const handleBtn = useRef(null);
   const [isDeleteUser, setIsDeleteUser] = useState(false);

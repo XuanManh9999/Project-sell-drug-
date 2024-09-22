@@ -13,6 +13,7 @@ import { getCategoriesForm } from "../../services/api-categories";
 import "../../styles/manage-medicine.css";
 import { Link } from "react-router-dom";
 import CONST from "../../utils/utils-const";
+// UI THUOC
 function ManageMedicine() {
   const btnSubmid = useRef();
   const [data, setData] = useState({
@@ -86,7 +87,8 @@ function ManageMedicine() {
   };
 
   const handleDeleteMedicineById = async (id) => {
-    if (id) {
+    const isDelete = window.confirm("Bạn có chắc chắn muốn xóa không?");
+    if (id && isDelete) {
       const { code, message } = await deleteMedicineById(id);
 
       if (code === 200) {
@@ -101,6 +103,9 @@ function ManageMedicine() {
     }
   };
 
+
+
+  // Thêm và sửa thuốc
   const handleSubmid = async () => {
     const {
       id,

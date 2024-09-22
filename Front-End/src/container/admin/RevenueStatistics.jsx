@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../styles/revenue-statistics.css";
 import { getStatistics } from "../../services/api-statistics";
+// UI Thong ke
 function RevenueStatistics() {
   const [statistics, setStatistics] = useState({
     totalBills: 0,
@@ -8,7 +9,7 @@ function RevenueStatistics() {
     totalProductsSold: 0,
     totalAccounts: 0,
   });
-
+  // ReactJS -> ReactRouter DOM
   useEffect(() => {
     const fetchData = async () => {
       const { code, message, data } = await getStatistics();
