@@ -13,5 +13,6 @@ public class DetailBillDTO {
     private Integer status;
     private Long id_medicine;
     private Long id_bill;
+    private MedicineDTO medicineDTO;
 
 }

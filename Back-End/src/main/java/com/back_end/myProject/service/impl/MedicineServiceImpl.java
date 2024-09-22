@@ -52,7 +52,8 @@ public class MedicineServiceImpl implements IMedicine {
 
     @Override
     public Page<MedicineDTO> getAllMedicines(Pageable pageable) {
-        Page<Medicine> medicines = medicineRepository.findAll(pageable);
+        // Sử dụng phương thức tìm kiếm thuốc có số lượng > 0
+        Page<Medicine> medicines = medicineRepository.findAllByQuantityGreaterThan(0, pageable);
 
         return medicines.map(medicine -> {
             MedicineDTO medicineDTO = modelMapper.map(medicine, MedicineDTO.class);
@@ -65,6 +66,7 @@ public class MedicineServiceImpl implements IMedicine {
             return medicineDTO;
         });
     }
+
 
 
     @Override

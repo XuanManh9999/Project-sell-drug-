@@ -2,12 +2,14 @@ package com.back_end.myProject.service.impl;
 
 import com.back_end.myProject.dto.BillDTO;
 import com.back_end.myProject.dto.DetailBillDTO;
+import com.back_end.myProject.dto.RevenueStatisticsDTO;
 import com.back_end.myProject.entities.Bill;
 import com.back_end.myProject.entities.DetailBill;
 import com.back_end.myProject.entities.Medicine;
 import com.back_end.myProject.repositorys.BillRepository;
 import com.back_end.myProject.repositorys.DetailBillRepository;
 import com.back_end.myProject.repositorys.MedicineRepository;
+import com.back_end.myProject.repositorys.UserRepository;
 import com.back_end.myProject.service.IBill;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
@@ -31,12 +33,15 @@ public class BillServiceImpl implements IBill {
     private final ModelMapper modelMapper;
     private final BillRepository billRepository;
     private final MedicineRepository medicineRepository;
-    public BillServiceImpl(BillRepository billRepository, MedicineRepository medicineRepository, ModelMapper modelMapper, DetailBillRepository detailBillRepository)
+    private final UserRepository userRepository;
+
+    public BillServiceImpl(BillRepository billRepository, MedicineRepository medicineRepository, ModelMapper modelMapper, DetailBillRepository detailBillRepository, UserRepository userRepository)
     {
         this.billRepository = billRepository;
         this.modelMapper = new ModelMapper();
         this.medicineRepository = medicineRepository;
         this.detailBillRepository = detailBillRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -51,17 +56,33 @@ public class BillServiceImpl implements IBill {
         Bill savedBill = billRepository.save(bill);
 
         if (billDTO.getDetailBills() != null) {
-           List<DetailBillDTO> detailBillDTOS = billDTO.getDetailBills();
+            List<DetailBillDTO> detailBillDTOS = billDTO.getDetailBills();
             for (DetailBillDTO detailBillDTO : detailBillDTOS) {
                 DetailBill detailBill = new DetailBill();
                 // Tìm thuốc theo ID
-                Optional<Medicine> medicine = medicineRepository.findById(detailBillDTO.getId_medicine());
-                if (medicine.isPresent()) {
-                    detailBill.setMedicine(medicine.get());
-                    detailBill.setQuantity(detailBillDTO.getQuantity());
-                    detailBill.setBill(savedBill);  // Gán hóa đơn đã lưu
-                    detailBill.setStatus(1);
-                    detailBillRepository.save(detailBill);
+                Optional<Medicine> medicineOptional = medicineRepository.findById(detailBillDTO.getId_medicine());
+                if (medicineOptional.isPresent()) {
+                    Medicine medicine = medicineOptional.get();
+
+                    // Kiểm tra nếu số lượng thuốc đủ để bán
+                    if (medicine.getQuantity() >= detailBillDTO.getQuantity()) {
+                        // Trừ đi số lượng thuốc
+                        double newQuantity = medicine.getQuantity() - detailBillDTO.getQuantity();
+                        medicine.setQuantity(newQuantity);
+
+                        // Lưu thuốc đã cập nhật số lượng
+                        medicineRepository.save(medicine);
+
+                        // Lưu chi tiết hóa đơn
+                        detailBill.setMedicine(medicine);
+                        detailBill.setQuantity(detailBillDTO.getQuantity());
+                        detailBill.setBill(savedBill);  // Gán hóa đơn đã lưu
+                        detailBill.setStatus(1);
+                        detailBillRepository.save(detailBill);
+                    } else {
+                        // Xử lý khi số lượng thuốc không đủ để bán
+                        System.out.println("Không đủ số lượng thuốc với ID: " + detailBillDTO.getId_medicine());
+                    }
                 } else {
                     // Xử lý khi không tìm thấy thuốc, có thể thêm thông báo lỗi
                     System.out.println("Không tìm thấy thuốc với ID: " + detailBillDTO.getId_medicine());
@@ -72,6 +93,7 @@ public class BillServiceImpl implements IBill {
         // Kiểm tra xem bill đã được lưu thành công chưa
         return savedBill.getId() != null;
     }
+
 
 
     @Override
@@ -155,6 +177,25 @@ public class BillServiceImpl implements IBill {
     @Override
     public List<BillDTO> searchBill(BillDTO billDTO) {
         return billRepository.searchBill(billDTO);
+    }
+
+    @Override
+    public BillDTO detailBill(Long id) {
+        return billRepository.detailBill(id);
+    }
+
+    @Override
+    public RevenueStatisticsDTO statistics() {
+        Long billCount = (Long) billRepository.count();
+        double totalRevenue = detailBillRepository.calculateTotalRevenue();
+        Long soldProductCount = (Long) detailBillRepository.countSoldProducts();
+        Long accountCount = (Long) userRepository.count();
+        RevenueStatisticsDTO revenueStatisticsDTO = new RevenueStatisticsDTO();
+        revenueStatisticsDTO.setTotalBills(billCount);
+        revenueStatisticsDTO.setTotalRevenue(totalRevenue);
+        revenueStatisticsDTO.setTotalProductsSold(soldProductCount);
+        revenueStatisticsDTO.setTotalAccounts(accountCount);
+        return revenueStatisticsDTO;
     }
 
 }

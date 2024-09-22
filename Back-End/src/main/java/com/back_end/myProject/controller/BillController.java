@@ -1,6 +1,7 @@
 package com.back_end.myProject.controller;
 
 import com.back_end.myProject.dto.BillDTO;
+import com.back_end.myProject.dto.RevenueStatisticsDTO;
 import com.back_end.myProject.entities.Bill;
 import com.back_end.myProject.entities.Category;
 import com.back_end.myProject.service.IBill;
@@ -49,6 +50,21 @@ public class BillController {
         }
     }
 
+
+    @GetMapping(value = "/statistics")
+    public ResponseEntity<?> getBillStatistics() {
+        ResponseCustom responseCustom;
+        try {
+            RevenueStatisticsDTO revenueStatisticsDTO =  new RevenueStatisticsDTO();
+            revenueStatisticsDTO  = billService.statistics();
+            responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Get Bill Statistics", revenueStatisticsDTO);
+            return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }catch (Exception ex) {
+            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Get Bill Statistics", ex);
+            return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping(value = "/search-bill")
     public ResponseEntity<?> searchBill(@ModelAttribute BillDTO billDTO) {
         ResponseCustom  responseCustom;
@@ -56,6 +72,25 @@ public class BillController {
             List<BillDTO> billDTOList = billService.searchBill(billDTO);
             responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Search Bill", billDTOList);
             return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+        }catch (Exception ex) {
+            responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @GetMapping(value = "/detail-bill/{id}")
+    public ResponseEntity<?> detailBill(@PathVariable(name = "id") Long id) {
+        ResponseCustom responseCustom;
+        try {
+            if (id != null) {
+                BillDTO billDTO = billService.detailBill(id);
+                responseCustom = new ResponseCustom(HttpStatus.OK.value(), "Detail Bill", billDTO);
+                return new ResponseEntity<>(responseCustom, HttpStatus.OK);
+            }else {
+                responseCustom = new ResponseCustom(HttpStatus.BAD_REQUEST.value(), "Detail Bill Not Found", billService.findBillById(id));
+                return new ResponseEntity<>(responseCustom, HttpStatus.BAD_REQUEST);
+            }
         }catch (Exception ex) {
             responseCustom = new ResponseCustom(HttpStatus.INTERNAL_SERVER_ERROR.value(), ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
             return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -136,5 +171,8 @@ public class BillController {
             return new ResponseEntity<>(responseCustom, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
+
 
 }
