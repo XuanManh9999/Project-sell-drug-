@@ -58,7 +58,15 @@ const searchBill = async (params) => {
     return error.response.data;
   }
 };
-
+const getDetailBillById = async (id) => {
+  let response;
+  try {
+    response = await AxiosConFig.get(`detail-bill/${id}`);
+    return response?.data || {};
+  } catch (error) {
+    return error.response.data;
+  }
+};
 export {
   getAllBill,
   getBillById,
@@ -66,4 +74,5 @@ export {
   updateBill,
   deleteBill,
   searchBill,
+  getDetailBillById,
 };

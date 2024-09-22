@@ -11,7 +11,8 @@ const PATH = {
   MANAGE_MEDICINE: "quan-ly-thuoc",
   MANAGE_CATEGORY: "quan-ly-loai-thuoc",
   MANAGE_BILL: "quan-ly-hoa-don",
-  MANAGE_REVENUE: "quan-ly-doanh-thu",
+  MANAGE_REVENUE: "thong-ke-doanh-thu",
+  DETAIL_BILL: "/trang-chu/chi-tiet-hoa-don/",
 };
 
 export default PATH;

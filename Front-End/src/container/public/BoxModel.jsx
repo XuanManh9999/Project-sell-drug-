@@ -93,6 +93,8 @@ function BoxModel({
     setDataProps({});
   };
 
+  console.log("xuan manh check data", data);
+
   return (
     <div className="wrapper">
       <div className="main-container">
@@ -132,7 +134,23 @@ function BoxModel({
                         placeholder="Quantity"
                         data-id={product.id} // Gán data-id để lấy giá trị trong handleSubmit
                         disabled={!checkedProducts[product.id]} // Chỉ cho phép nhập số lượng khi checkbox được chọn
-                        onChange={calculateTotal}
+                        onChange={(e) => {
+                          const value = Number(e.target.value);
+                          const max = product.quantity;
+                          const min = 0;
+
+                          // Kiểm tra và điều chỉnh giá trị
+                          if (value > max) {
+                            e.target.value = max; // Gán giá trị tối đa nếu vượt quá
+                          } else if (value < min) {
+                            e.target.value = min; // Gán giá trị tối thiểu nếu thấp hơn
+                          }
+
+                          // Gọi hàm tính tổng (nếu cần)
+                          calculateTotal();
+                        }}
+                        max={product.quantity}
+                        min={0}
                       />
                     </td>
                     <td>

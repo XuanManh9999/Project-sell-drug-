@@ -3,7 +3,7 @@ import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
 import "../../styles/manage-medicine.css";
 import { Link } from "react-router-dom";
-import BoxModel from "../public/Boxmodel";
+import { BoxModel } from "../public/index";
 import {
   getAllBill,
   getBillById,
@@ -13,6 +13,7 @@ import {
   deleteBill,
 } from "../../services/api-bill";
 import CONST from "../../utils/utils-const";
+import PATH from "../../utils/utils-url-route";
 
 function ManageBill() {
   const handleBtn = useRef(null);
@@ -75,7 +76,6 @@ function ManageBill() {
     toast.error("Vui lòng chọn hóa đơn để sửa");
   };
 
-  const handleViewDetail = async () => {};
   const handleDeleteBill = async (id) => {
     const isConfirm = window.confirm("Bạn có chắc chắn muốn xóa hóa đơn này?");
     if (id && isConfirm) {
@@ -221,11 +221,11 @@ function ManageBill() {
                         onClick={() => handleEditBill(bill.id)}>
                         Edit
                       </button>
-                      <button
-                        className="btn-viewdetail"
-                        onClick={() => handleViewDetail(bill.id)}>
+                      <Link
+                        to={`${PATH.DETAIL_BILL}?bill-id=${bill.id}`}
+                        className="btn-viewdetail">
                         View Details
-                      </button>
+                      </Link>
                       <button
                         className="btn-delete"
                         onClick={() => handleDeleteBill(bill.id)}>

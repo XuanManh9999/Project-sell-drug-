@@ -4,3 +4,4 @@ export { default as ManageMedicine } from "./ManageMedicine.jsx";
 export { default as ManageCategory } from "./ManageCategory.jsx";
 export { default as ManageBill } from "./ManageBill.jsx";
 export { default as RevenueStatistics } from "./RevenueStatistics.jsx";
+export { default as DetailBill } from "./DetailBill.jsx";

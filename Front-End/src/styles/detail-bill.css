@@ -1,0 +1,58 @@
+.detail-bill-wrapper {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.detail-bill-wrapper h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.detail-bill-content {
+    padding: 10px;
+}
+
+.customer-info,
+.product-info,
+.total-price {
+    margin-bottom: 20px;
+}
+
+.customer-info h2,
+.product-info h2,
+.total-price h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th,
+table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.total-price  {
+    display: flex;
+}
+
+.total-price p {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+}

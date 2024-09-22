@@ -9,6 +9,7 @@ import {
   ManageCategory,
   ManageBill,
   RevenueStatistics,
+  DetailBill,
 } from "./container/admin";
 function App() {
   const publicRoutes = [
@@ -25,7 +26,8 @@ function App() {
             <Route path={PATH.MANAGE_CATEGORY} element={<ManageCategory />} />
             <Route path={PATH.MANAGE_MEDICINE} element={<ManageMedicine />} />
             <Route path={PATH.MANAGE_BILL} element={<ManageBill />} />
-            <Route path={PATH.MANAGE_REVENUE} element={<RevenueStatistics />} />
+            <Route path={PATH.DETAIL_BILL} element={<DetailBill />} />
+            <Route path={PATH.MANAGE_MONEY} element={<RevenueStatistics />} />
           </Route>
         </Routes>
         {/* Public */}

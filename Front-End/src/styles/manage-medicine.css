@@ -30,6 +30,7 @@
     justify-content: center;
     /* Căn giữa các button */
 }
+
 .btn-viewdetail,
 .btn-edit,
 .btn-delete {
@@ -44,9 +45,16 @@
     cursor: pointer;
     /* Hiển thị con trỏ khi hover */
 }
+
 .btn-viewdetail {
+    padding-top: 20px !important;
+    padding: unset;
     background-color: orange;
     /* Màu nền */
     color: white;
     border: none;
+    text-decoration: none;
+    border-radius: 5px;
+    padding: 10px 5px;
+    text-align: center;
 }

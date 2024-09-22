@@ -17,14 +17,16 @@ function HomeAdmin() {
     <div className="home-admin-container">
       <nav className="navbar">
         <Link to={"/trang-chu"} className="navbar-brand">
-          <h1>HomeAdmin</h1>
+          <h1 style={{
+            color: "white",
+          }}>Nhà thuốc BK</h1>
         </Link>
         <div className="navbar-menu">
           <Link to={PATH.MANAGE_USER}>Quản lý người dùng</Link>
           <Link to={PATH.MANAGE_CATEGORY}>Quản lý loại thuốc</Link>
           <Link to={PATH.MANAGE_MEDICINE}>Quản lý thuốc</Link>
           <Link to={PATH.MANAGE_BILL}>Quản lý hóa đơn</Link>
-          <Link to={PATH.MANAGE_BILL}>Thống kê doanh thu</Link>
+          <Link to={PATH.MANAGE_MONEY}>Thống kê doanh thu</Link>
         </div>
         <div className="navbar-user">
           <span className="username">Xin chào, Admin</span>
@@ -35,9 +37,7 @@ function HomeAdmin() {
       </nav>
       <main className="main-content">
         {isRootPath && <h2>Chào mừng đến với trang quản trị</h2>}
-        {/* Chỉ hiển thị khi path là root */}
         <Outlet />
-        {/* Nội dung chính của trang sẽ được thêm vào đây */}
       </main>
       <ToastContainer
         position="top-right"

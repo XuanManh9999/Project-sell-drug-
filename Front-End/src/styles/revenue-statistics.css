@@ -1,0 +1,54 @@
+.revenue-statistics-wrapper {
+    padding: 20px;
+    background-color: #ffffff;
+    /* Nền trắng */
+    border-radius: 8px;
+    /* Bo góc */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Đổ bóng */
+    max-width: 600px;
+    /* Giới hạn chiều rộng */
+    margin: 20px auto;
+    /* Giữa trang */
+}
+
+h1 {
+    font-size: 24px;
+    /* Kích thước tiêu đề */
+    color: #333;
+    /* Màu chữ */
+    text-align: center;
+    /* Căn giữa tiêu đề */
+    margin-bottom: 20px;
+    /* Khoảng cách dưới tiêu đề */
+}
+
+.statistics-info {
+    margin-top: 20px;
+    padding: 15px;
+    /* Padding cho vùng thông tin */
+    border: 1px solid #e0e0e0;
+    /* Đường viền */
+    border-radius: 5px;
+    /* Bo góc cho vùng thông tin */
+    background-color: #f7f7f7;
+    /* Nền xám nhạt */
+}
+
+.statistics-info p {
+    font-size: 18px;
+    /* Kích thước chữ */
+    margin: 10px 0;
+    /* Khoảng cách giữa các dòng */
+    color: #555;
+    /* Màu chữ */
+    display: flex;
+    /* Sử dụng flex để căn chỉnh */
+    justify-content: space-between;
+    /* Căn giữa khoảng cách */
+}
+
+strong {
+    color: #333;
+    /* Màu cho chữ đậm */
+}
